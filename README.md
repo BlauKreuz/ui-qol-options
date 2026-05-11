@@ -13,7 +13,8 @@ For help and suggestions: [![Discord Server](https://img.shields.io/badge/-Disco
   - Fix sidebar menu buttons to right edge. 
   - Gradient color background settings for the fixed sidebar and left side button area
 
-<img width="764" height="892" alt="uiqol1" src="https://github.com/user-attachments/assets/edcc572b-67a2-41fe-abfd-6e261578ca4a" />
-
-<img width="579" height="943" alt="uiqol2" src="https://github.com/user-attachments/assets/58847907-cba8-44e9-a10d-46f36dcfdad1" />
+<img width="400" alt="uiqol1" src="https://github.com/user-attachments/assets/edcc572b-67a2-41fe-abfd-6e261578ca4a" />
+.
+.
+<img width="400" alt="uiqol2" src="https://github.com/user-attachments/assets/58847907-cba8-44e9-a10d-46f36dcfdad1" />
 
