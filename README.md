@@ -1,4 +1,3 @@
-<img width="764" height="892" alt="uiqol1" src="https://github.com/user-attachments/assets/edb38927-a6c9-4416-8ce7-e067c525d7e0" />
 # Quality of Life options for Foundry VTT user interface
 
 For help and suggestions: [![Discord Server](https://img.shields.io/badge/-Discord-%232c2f33?style=flat-square&logo=discord)](https://discord.gg/NyCX2nN4qP)
