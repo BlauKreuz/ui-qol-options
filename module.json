@@ -1,0 +1,13 @@
+{
+    "id": "ui-qol-options",
+    "title": "UI Quality of Life Options",
+    "description": "Small UI improvements for Foundry VTT V13+.",
+    "authors": [{"name": "Kurko"}],
+    "version": "1.0.0",
+    "compatibility": {
+        "minimum": "13",
+        "verified": "13"
+    },
+    "esmodules": ["scripts/ui-qol-options.js"],
+    "styles": ["styles/hotbar-scale.css"]
+}

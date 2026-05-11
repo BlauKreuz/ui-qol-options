@@ -1,0 +1,35 @@
+<form autocomplete="off">
+    <div class="form-group">
+        <label>Mode</label>
+        <div class="form-fields" style="flex-direction:column; gap:6px; align-items:flex-start;">
+            <label style="font-weight:normal; cursor:pointer; display:flex; gap:6px; align-items:center;">
+                <input type="radio" name="mode" value="theme" {{#unless isCustom}}checked{{/unless}}> Use theme default
+            </label>
+            <label style="font-weight:normal; cursor:pointer; display:flex; gap:6px; align-items:center;">
+                <input type="radio" name="mode" value="custom" {{#if isCustom}}checked{{/if}}> Custom colors
+            </label>
+        </div>
+    </div>
+    <div class="uiqol-custom-colors"{{#unless isCustom}} style="display:none"{{/unless}}>
+        <hr style="margin:6px 0;">
+        <div class="form-group">
+            <label>Top color</label>
+            <div class="form-fields">
+                <input type="color" name="topColor" value="{{topColor}}">
+                <input type="range" name="topAlpha" min="0" max="100" step="1" value="{{topAlpha}}" style="flex:1">
+                <span class="uiqol-alpha-label" style="min-width:3.2em; text-align:right;">{{topAlpha}}%</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Bottom color</label>
+            <div class="form-fields">
+                <input type="color" name="bottomColor" value="{{bottomColor}}">
+                <input type="range" name="bottomAlpha" min="0" max="100" step="1" value="{{bottomAlpha}}" style="flex:1">
+                <span class="uiqol-alpha-label" style="min-width:3.2em; text-align:right;">{{bottomAlpha}}%</span>
+            </div>
+        </div>
+    </div>
+    <footer class="sheet-footer" style="margin-top:8px;">
+        <button type="submit"><i class="fas fa-check"></i> Save</button>
+    </footer>
+</form>

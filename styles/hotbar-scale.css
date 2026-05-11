@@ -1,0 +1,60 @@
+/* ------------------------------------------------------------------ *
+ * Hotbar single-row layout                                            *
+ *                                                                     *
+ * Foundry V13 adds .sm at ≤1488 px viewport width.  That normally    *
+ * doubles #hotbar's height and fixes #action-bar to a narrow 5-slot  *
+ * width, causing a 2-row wrap.  Override those to keep a single row. *
+ * Also covers legacy .compact and .md.offset selectors.              *
+ * ------------------------------------------------------------------ */
+
+#hotbar.compact #action-bar,
+#hotbar.md.offset #action-bar,
+#hotbar.sm #action-bar {
+    width: unset;
+}
+
+#hotbar.compact,
+#hotbar.md.offset,
+#hotbar.sm {
+    height: unset;
+}
+
+/* ------------------------------------------------------------------ *
+ * Override Foundry's 1px ui-control border (foundry2.css ~5569)      *
+ * with 2px while this module is active.                              *
+ * Excludes the sidebar expand/collapse toggle button.                *
+ * ------------------------------------------------------------------ */
+button.ui-control:not([data-action="toggleState"]),
+a.ui-control:not([data-action="toggleState"]),
+li.ui-control:not([data-action="toggleState"]),
+.placeable-hud .control-icon,
+.placeable-hud input {
+    border-width: 2px;
+}
+
+#hotbar #action-bar {
+    flex-wrap: nowrap;
+}
+
+#hotbar #action-bar .slot {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Left-align the hotbar in #ui-middle so it slides toward the left   *
+ * when the viewport narrows rather than overflowing both sides.      *
+ * Mirrors classic-ui's adjust-hotbar behaviour.                      */
+#ui-middle #ui-bottom {
+    align-items: start;
+}
+
+/* ------------------------------------------------------------------ *
+ * Hotbar slot scale slider                                            *
+ *                                                                     *
+ * When the slider is < 100 %, JS applies zoom on #action-bar.        *
+ * Keep width:max-content so #hotbar shrinks with the action-bar      *
+ * while the control panels on either side are unaffected.            *
+ * ------------------------------------------------------------------ */
+
+#hotbar.ui-qol-hotbar-zoomed #action-bar {
+    width: max-content;
+}

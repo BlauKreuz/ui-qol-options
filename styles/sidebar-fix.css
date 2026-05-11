@@ -1,0 +1,197 @@
+/* Gradient color variables — set by JS (_applyGradient) based on settings.
+   Fallback values here match the Foundry dark-theme defaults. */
+:root {
+    --uiqol-sidebar-top:    rgba(123, 130, 136, 0.855);
+    --uiqol-sidebar-bottom: rgba(123, 130, 136, 0);
+}
+
+/* Sidebar tab buttons fixed to right, menu expands/collapses as normal */
+.tabs.faded-ui {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1000;
+  background: linear-gradient(to bottom, var(--uiqol-sidebar-top), var(--uiqol-sidebar-top) 75%, var(--uiqol-sidebar-bottom) 90%, var(--uiqol-sidebar-bottom) 100%);
+  /*box-shadow: -2px 0 8px rgba(116, 116, 116, 0.2);*/
+  border-left: 0px solid  #586269d9;
+  padding-top: 16px; /*0.5em;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 56px; /* was 56 width of the tab bar */
+}
+
+.tabs.faded-ui menu {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#sidebar-content.expanded {
+  margin-right: 56px !important;
+background: var(--sidebar-background, var( --color-cool-5-90));
+border-right: 2px solid #000000aa;
+}
+
+/* Place the chat scrollbar on the right inside the expanded sidebar area */
+#sidebar-content.expanded #chat .chat-scroll {
+  direction: ltr !important;
+  padding-right: 2px !important;
+}
+
+#sidebar-content.expanded #chat .chat-log {
+  direction: ltr !important;
+}
+
+/* Restore background for expanded, non-popout Chat sidebar only */
+#interface.theme-light #sidebar-content.expanded .sidebar-tab.chat-sidebar:not(.sidebar-popout){
+  background: rgba(212,209,198,0.95) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+
+.tabs.faded-ui button {
+  margin: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabs.faded-ui .collapse {
+  margin-top: 2em;
+}
+
+/* Restore top padding so the first tab has spacing from the top edge */
+#sidebar-tabs {
+  padding: 18px 5px 0 0 !important;
+}
+
+/* ------------------------------------------------------------------ *
+ * Keep #chat-controls horizontal above the textarea at all times.    *
+ *                                                                     *
+ * In notification mode Foundry's _toggleNotifications() appends     *
+ * directly into #chat-notifications: textarea first, then           *
+ * #chat-controls.  It also adds class "vertical" to #roll-privacy   *
+ * which rotates the split-button via writing-mode:tb.               *
+ *                                                                     *
+ * Fix: convert #chat-notifications to flex-column and use `order`   *
+ * to swap controls above the textarea visually.                     *
+ * The "vertical" class is stripped via JS (renderChatInput hook).   *
+ * ------------------------------------------------------------------ */
+
+#chat-notifications {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    /* Foundry sets align-items:end for grid row alignment; in flex-column
+       this would right-align children instead of stretching them. Force stretch
+       so .overflow, #chat-controls, and #chat-message all fill full width. */
+    align-items: stretch !important;
+    /* Pull the notification box away from the fixed tab buttons (56px wide
+       at right:0).  When the sidebar is collapsed the tab bar floats over
+       the viewport right edge, so we need clearance.  Animate to match the
+       100 ms sidebar slide. */
+    margin-right: 50px !important;
+    transition: margin-right 100ms ease;
+}
+
+#ui-right #ui-right-column-1 {
+    padding-bottom: 20px;
+}
+
+/* When the sidebar is open it fills the right portion of #ui-right, so the
+   notification box no longer needs to clear the tab bar — reset to flush. */
+#ui-right:has(#sidebar-content.expanded) #chat-notifications {
+    margin-right: 0 !important;
+    /*align-items: flex-start !important;*/
+}
+
+#sidebar-content #chat{ 
+    align-items: flex-start !important;
+}
+
+/* Log area takes all remaining vertical space */
+#chat-notifications .overflow {
+    flex: 1 !important;
+    min-height: 0;
+}
+
+/* Controls first (order:1 < order:2 = textarea) */
+#chat-notifications #chat-controls {
+    order: 1;
+    flex: none;
+    display: flex !important;
+    justify-content: space-between !important;
+    position: static !important;
+    inset: unset !important;
+    width: 100%;
+    pointer-events: all;
+    padding-inline: var(--chat-message-spacing, 4px);
+}
+
+#chat-notifications #chat-message {
+    order: 2;
+}
+
+/* ------------------------------------------------------------------ *
+ * Left-side background strip to match the right sidebar tab bar.     *
+ * #ui-left-column-1 holds scene-controls and players; it already     *
+ * spans full height via its parent.  We add the same background,     *
+ * shadow and border used on .tabs.faded-ui on the right.             *
+ * ------------------------------------------------------------------ */
+
+ 
+#ui-left {
+  /* The right sidebar's .tabs.faded-ui is 56px wide, so add that as left padding to the left column. */
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  --control-size: 44px;
+}
+
+#ui-left-column-1 {
+    background: linear-gradient(to bottom, var(--uiqol-sidebar-top), var(--uiqol-sidebar-top) 75%, var(--uiqol-sidebar-bottom) 90%, var(--uiqol-sidebar-bottom) 100%);
+    /*box-shadow: 2px 0 8px rgba(116, 116, 116, 0.2);*/
+    border-right: 0px solid #586269d9;
+    /*padding: 0.5em 4px;*/
+    /* Fade with the rest of the UI, matching .faded-ui behaviour */
+    opacity: var(--ui-fade-opacity);
+    transition: opacity var(--ui-fade-delay) var(--ui-fade-duration);
+}
+
+#ui-left-column-1:hover {
+    opacity: 1;
+    transition: opacity var(--ui-fade-duration);
+}
+
+
+#ui-left-column-1 {
+    /* The right sidebar's .tabs.faded-ui is 56px wide, so add that as left padding to the left column.    */
+    padding-left: 10px;
+    padding-top: 16px;
+  padding-bottom: 20px;
+}
+
+
+#ui-left #ui-left-column-1 {
+  width: calc((var(--control-columns) * var(--control-size)) + ((var(--control-columns) - 1) * 5px));
+  
+}
+
+#ui-left-column-2 {
+    padding-top: 16px;
+}
+
+
+/* Global scrollbar colours are now managed by sr5-custom-ui.css when a colour
+   scheme is active.  This fallback applies only when sr5-custom-ui is absent
+   or its sr5cui-colors gate is off (sr5-default scheme / no module). */
+body:not(.sr5cui-colors) * {
+    scrollbar-width: thin;
+    scrollbar-color: #dedededb #4d4d4d9e;
+}
