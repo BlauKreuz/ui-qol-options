@@ -1,3 +1,4 @@
+<img width="764" height="892" alt="uiqol1" src="https://github.com/user-attachments/assets/edb38927-a6c9-4416-8ce7-e067c525d7e0" />
 # Quality of Life options for Foundry VTT user interface
 
 For help and suggestions: [![Discord Server](https://img.shields.io/badge/-Discord-%232c2f33?style=flat-square&logo=discord)](https://discord.gg/NyCX2nN4qP)
@@ -12,4 +13,8 @@ For help and suggestions: [![Discord Server](https://img.shields.io/badge/-Disco
   - Chat Card context menu (right click) opening to left side instead of above or below the card.
   - Fix sidebar menu buttons to right edge. 
   - Gradient color background settings for the fixed sidebar and left side button area
+
+<img width="764" height="892" alt="uiqol1" src="https://github.com/user-attachments/assets/edcc572b-67a2-41fe-abfd-6e261578ca4a" />
+
+<img width="579" height="943" alt="uiqol2" src="https://github.com/user-attachments/assets/58847907-cba8-44e9-a10d-46f36dcfdad1" />
 
