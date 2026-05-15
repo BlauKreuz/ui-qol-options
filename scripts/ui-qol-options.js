@@ -182,7 +182,7 @@ Hooks.on('init', () => {
     game.settings.register('ui-qol-options', 'clearCompendiumTabs', {
         name: 'Clear Compendium Tabs',
         hint: 'Tidies up the compendium sidebar: left-aligns the pack name, moves the footer label to the right, ' +
-              'and adds a white fade overlay on the left side of banner images.',
+              'and adds a black fade overlay on the left side of banner images.',
         scope: 'client',
         config: true,
         type: Boolean,
