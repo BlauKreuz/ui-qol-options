@@ -1,0 +1,45 @@
+/*
+ * Clear Compendium Tabs
+ * Applied by ui-qol-options when 'clearCompendiumTabs' setting is enabled.
+ */
+
+/* Name: left-aligned, white text */
+.compendium-sidebar .compendium {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.compendium-sidebar .compendium .compendium-name {
+    justify-content: flex-start;
+}
+
+/* Footer: move to right side, 40% black background */
+.compendium-sidebar .compendium .compendium-footer {
+    left:          unset;
+    right:         0;
+    background:    rgba(0, 0, 0, 0.4);
+    border-radius: 3px 0 0 0;
+}
+
+/* Footer: move to right side, 40% black background */
+.compendium-sidebar .compendium .status-icons {
+    left:          unset;
+    right:         0;
+    bottom:         0;
+}
+
+/* White → transparent gradient overlay, left to right, above the banner */
+.compendium-sidebar .compendium::before {
+    content:        '';
+    position:       absolute;
+    inset:          0;
+    background:     linear-gradient(to right, rgb(0, 0, 0, 0.8), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index:        1;
+}
+
+/* Ensure name and footer render above the gradient overlay */
+.compendium-sidebar .compendium .compendium-name,
+.compendium-sidebar .compendium .compendium-footer,
+.compendium-sidebar .compendium .status-icons {
+    z-index: 2;
+}
