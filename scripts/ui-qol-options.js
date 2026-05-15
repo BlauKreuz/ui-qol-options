@@ -179,6 +179,31 @@ Hooks.on('init', () => {
     });
 
 
+    game.settings.register('ui-qol-options', 'clearCompendiumTabs', {
+        name: 'Clear Compendium Tabs',
+        hint: 'Tidies up the compendium sidebar: left-aligns the pack name, moves the footer label to the right, ' +
+              'and adds a white fade overlay on the left side of banner images.',
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: value => {
+            const styleId = 'ui-qol-compendium-clear-style';
+            if (value) {
+                if (!document.getElementById(styleId)) {
+                    const link = document.createElement('link');
+                    link.id = styleId;
+                    link.rel = 'stylesheet';
+                    link.type = 'text/css';
+                    link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
+                    document.head.appendChild(link);
+                }
+            } else {
+                document.getElementById(styleId)?.remove();
+            }
+        },
+    });
+
     // ── Sidebar gradient color settings ───────────────────────
     game.settings.register('ui-qol-options', 'sidebarGradientMode', {
         scope: 'client', config: false, type: String, default: 'theme',
@@ -317,6 +342,19 @@ Hooks.on('ready', () => {
     const INTERACTIVE = 'input:not([disabled]), select, textarea, button, a, label, [contenteditable], canvas, ' +
         '[draggable="true"], ' +
         '.window-resize-handle, .window-resizable-handle';
+
+    // Inject compendium-clear CSS if enabled
+    if (game.settings.get('ui-qol-options', 'clearCompendiumTabs')) {
+        const styleId = 'ui-qol-compendium-clear-style';
+        if (!document.getElementById(styleId)) {
+            const link = document.createElement('link');
+            link.id = styleId;
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
+            document.head.appendChild(link);
+        }
+    }
 
     // Inject sidebar fix CSS if enabled
     if (game.settings.get('ui-qol-options', 'fixedSidebarButtons')) {
