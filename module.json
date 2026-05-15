@@ -14,5 +14,9 @@
   "download": "https://github.com/BlauKreuz/ui-qol-options/releases/download/v1.0/ui-qol-options-v1.0.zip",
     
     "esmodules": ["scripts/ui-qol-options.js"],
-    "styles": ["styles/hotbar-scale.css"]
+    "styles": [
+        "styles/hotbar-scale.css",
+    "styles/sidebar-fix.css",
+    "styles/compendium-clear.css"
+    ]
 }
