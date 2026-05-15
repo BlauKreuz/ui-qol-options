@@ -3,7 +3,7 @@
     "title": "UI Quality of Life Options",
     "description": "Small UI improvements for Foundry VTT V13+.",
     "authors": [{"name": "Kurko"}],
-    "version": "1.0",
+    "version": "1.1",
     "compatibility": {
         "minimum": "13",
         "verified": "13"
@@ -11,7 +11,7 @@
 
 "url": "https://github.com/BlauKreuz/ui-qol-options",
   "manifest": "https://github.com/BlauKreuz/ui-qol-options/releases/download/v1.0/module.json",
-  "download": "https://github.com/BlauKreuz/ui-qol-options/releases/download/v1.0/ui-qol-options-v1.0.zip",
+  "download": "https://github.com/BlauKreuz/ui-qol-options/releases/download/v1.0/ui-qol-options-v1.1.zip",
     
     "esmodules": ["scripts/ui-qol-options.js"],
     "styles": [
