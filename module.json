@@ -16,7 +16,7 @@
     "esmodules": ["scripts/ui-qol-options.js"],
     "styles": [
         "styles/hotbar-scale.css",
-    "styles/sidebar-fix.css",
-    "styles/compendium-clear.css"
+        "styles/sidebar-fix.css",
+        "styles/compendium-clear.css"
     ]
 }
