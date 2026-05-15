@@ -119,6 +119,31 @@ Hooks.on('init', () => {
         onChange: () => _applyHotbarSlotZoom(),
     });
 
+    game.settings.register('ui-qol-options', 'clearCompendiumTabs', {
+        name: 'Clear Compendium Tabs',
+        hint: 'Tidies up the compendium sidebar: left-aligns the pack name, moves the footer label to the right, ' +
+              'and adds a black fade overlay on the left side of banner images.',
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: value => {
+            const styleId = 'ui-qol-compendium-clear-style';
+            if (value) {
+                if (!document.getElementById(styleId)) {
+                    const link = document.createElement('link');
+                    link.id = styleId;
+                    link.rel = 'stylesheet';
+                    link.type = 'text/css';
+                    link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
+                    document.head.appendChild(link);
+                }
+            } else {
+                document.getElementById(styleId)?.remove();
+            }
+        },
+    });
+
     game.settings.register('ui-qol-options', 'fixedSidebarButtons', {
         name: 'Fix sidebar menu buttons to right',
         hint: 'Sidebar menu buttons will stay fixed on the right side and the menu will expand under them.\nNot compatible with "Classic UI" module\'s "Tabs On Top" option.',
@@ -176,32 +201,6 @@ Hooks.on('init', () => {
         };
         // Also update on click
         expander.addEventListener('click', () => setTimeout(updateTooltip, 0));
-    });
-
-
-    game.settings.register('ui-qol-options', 'clearCompendiumTabs', {
-        name: 'Clear Compendium Tabs',
-        hint: 'Tidies up the compendium sidebar: left-aligns the pack name, moves the footer label to the right, ' +
-              'and adds a black fade overlay on the left side of banner images.',
-        scope: 'client',
-        config: true,
-        type: Boolean,
-        default: false,
-        onChange: value => {
-            const styleId = 'ui-qol-compendium-clear-style';
-            if (value) {
-                if (!document.getElementById(styleId)) {
-                    const link = document.createElement('link');
-                    link.id = styleId;
-                    link.rel = 'stylesheet';
-                    link.type = 'text/css';
-                    link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
-                    document.head.appendChild(link);
-                }
-            } else {
-                document.getElementById(styleId)?.remove();
-            }
-        },
     });
 
     // ── Sidebar gradient color settings ───────────────────────
