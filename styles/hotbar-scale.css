@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ *
  * Hotbar single-row layout                                            *
  *                                                                     *
- * Foundry V13 adds .sm at ≤1488 px viewport width.  That normally    *
+ * Foundry adds .sm at ≤1488 px viewport width.  That normally    *
  * doubles #hotbar's height and fixes #action-bar to a narrow 5-slot  *
  * width, causing a 2-row wrap.  Override those to keep a single row. *
  * Also covers legacy .compact and .md.offset selectors.              *
