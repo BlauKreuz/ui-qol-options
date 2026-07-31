@@ -1,3 +1,6 @@
+## 2.1 - 31 Jul 2026
+Removal of redundant templates folder and its files
+
 ## 2.0 - 14 June 2026
 V14 compatibility and some fixes.
 
