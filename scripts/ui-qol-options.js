@@ -47,6 +47,43 @@ function _applyGradient(overrides) {
     root.style.setProperty('--uiqol-sidebar-bottom', bottomVal);
 }
 
+/** Ensure optional module styles are enabled/disabled strictly by setting state. */
+function _setOptionalStyle({ enabled, styleId, href }) {
+    const hrefMatches = (link) => link.href?.includes(href);
+    const removeExisting = () => {
+        const el = document.getElementById(styleId);
+        if (el) {
+            el.remove();
+            return;
+        }
+        // Remove any orphaned stylesheet link that wasn't properly tracked.
+        document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+            if (hrefMatches(link) && !link.id) link.remove();
+        });
+    };
+
+    if (!enabled) {
+        removeExisting();
+        document.documentElement.setAttribute(`data-uiqol-${styleId}`, 'disabled');
+        return;
+    }
+
+    removeExisting();
+    const link = document.createElement('link');
+    link.id = styleId;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = href;
+    document.head.appendChild(link);
+    document.documentElement.setAttribute(`data-uiqol-${styleId}`, 'enabled');
+}
+
+/** Enable or disable gradient controls without hiding their settings block. */
+function _setGradientControlsDisabled(block, disabled) {
+    block.classList.toggle('disabled', disabled);
+    block.querySelectorAll('input').forEach(input => input.disabled = disabled);
+}
+
 // ============================================================
 // Settings
 // ============================================================
@@ -98,7 +135,7 @@ Hooks.on('init', () => {
         default: 500,
         range: { min: 0, max: 1000, step: 50 },
     });
-    
+
     game.settings.register('ui-qol-options', 'chatContextMenuLeft', {
         name: 'Chat card context menu',
         hint: 'Open the right-click context menu to the left side of the chat card, outside the chat log area.',
@@ -122,25 +159,17 @@ Hooks.on('init', () => {
     game.settings.register('ui-qol-options', 'clearCompendiumTabs', {
         name: 'Clear Compendium Tabs',
         hint: 'Tidies up the compendium sidebar: left-aligns the pack name, moves the footer label to the right, ' +
-              'and adds a black fade overlay on the left side of banner images.',
+            'and adds a black fade overlay on the left side of banner images.',
         scope: 'client',
         config: true,
         type: Boolean,
         default: false,
         onChange: value => {
-            const styleId = 'ui-qol-compendium-clear-style';
-            if (value) {
-                if (!document.getElementById(styleId)) {
-                    const link = document.createElement('link');
-                    link.id = styleId;
-                    link.rel = 'stylesheet';
-                    link.type = 'text/css';
-                    link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
-                    document.head.appendChild(link);
-                }
-            } else {
-                document.getElementById(styleId)?.remove();
-            }
+            _setOptionalStyle({
+                enabled: value,
+                styleId: 'ui-qol-compendium-clear-style',
+                href: 'modules/ui-qol-options/styles/compendium-clear.css'
+            });
         },
     });
 
@@ -152,26 +181,20 @@ Hooks.on('init', () => {
         type: Boolean,
         default: false,
         onChange: value => {
-            const styleId = 'ui-qol-sidebar-fix-style';
-            if (value) {
-                if (!document.getElementById(styleId)) {
-                    const link = document.createElement('link');
-                    link.id = styleId;
-                    link.rel = 'stylesheet';
-                    link.type = 'text/css';
-                    link.href = 'modules/ui-qol-options/styles/sidebar-fix.css';
-                    document.head.appendChild(link);
-                }
-            } else {
-                document.getElementById(styleId)?.remove();
-            }
+            _setOptionalStyle({
+                enabled: value,
+                styleId: 'ui-qol-sidebar-fix-style',
+                href: 'modules/ui-qol-options/styles/sidebar-fix.css'
+            });
             ui?.chat?._toggleNotifications();
+            // Update controls immediately if the settings window is open.
+            document.querySelectorAll('.uiqol-gradient-block')
+                .forEach(block => _setGradientControlsDisabled(block, !value));
         }
     });
 
     // Patch sidebar toggle button tooltip to update immediately on expand/collapse
     Hooks.on('renderSidebar', (app) => {
-        if (!game.settings.get('ui-qol-options', 'fixedSidebarButtons')) return;
         const expander = app.element.querySelector('.tabs [data-action="toggleState"]');
         if (!expander) return;
         // Update tooltip immediately when expanded state changes
@@ -201,6 +224,18 @@ Hooks.on('init', () => {
         };
         // Also update on click
         expander.addEventListener('click', () => setTimeout(updateTooltip, 0));
+
+        // Clicking the already-active tab acts like clicking the collapse button.
+        app.element.addEventListener('click', event => {
+            if (!game.settings.get('ui-qol-options', 'fixedSidebarButtons')) return;
+            const button = event.target.closest('.tabs.faded-ui button, .tabs.faded-ui a');
+            if (!button || button === expander || button.matches('[data-action="toggleState"]')) return;
+            const tab = button.closest('[data-tab]') ?? button;
+            const active = tab.matches('.active, [aria-selected="true"], [aria-pressed="true"]') ||
+                tab.closest('.active, [aria-selected="true"], [aria-pressed="true"]') ||
+                (tab.dataset.tab && tab.dataset.tab === app.activeTab);
+            if (app.expanded && active) setTimeout(() => app.collapse(), 0);
+        }, true);
     });
 
     // ── Sidebar gradient color settings ───────────────────────
@@ -275,6 +310,18 @@ Hooks.on('renderSettingsConfig', (_app, html) => {
         </div>`;
 
     section.appendChild(block);
+    _setGradientControlsDisabled(
+        block,
+        !game.settings.get('ui-qol-options', 'fixedSidebarButtons')
+    );
+
+    // Update the visual state as soon as the checkbox is clicked, before the form is saved.
+    const fixedSidebarInput = section.querySelector(
+        'input[type="checkbox"][name$=".fixedSidebarButtons"]'
+    );
+    fixedSidebarInput?.addEventListener('change', event =>
+        _setGradientControlsDisabled(block, !event.currentTarget.checked)
+    );
 
     // Show/hide custom section on radio change.
     block.querySelectorAll('[name=uiqol-gradient-mode]').forEach(r =>
@@ -342,31 +389,18 @@ Hooks.on('ready', () => {
         '[draggable="true"], ' +
         '.window-resize-handle, .window-resizable-handle';
 
-    // Inject compendium-clear CSS if enabled
-    if (game.settings.get('ui-qol-options', 'clearCompendiumTabs')) {
-        const styleId = 'ui-qol-compendium-clear-style';
-        if (!document.getElementById(styleId)) {
-            const link = document.createElement('link');
-            link.id = styleId;
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = 'modules/ui-qol-options/styles/compendium-clear.css';
-            document.head.appendChild(link);
-        }
-    }
+    // Force optional CSS to match current settings, even after manifest/cache changes.
+    _setOptionalStyle({
+        enabled: game.settings.get('ui-qol-options', 'clearCompendiumTabs'),
+        styleId: 'ui-qol-compendium-clear-style',
+        href: 'modules/ui-qol-options/styles/compendium-clear.css'
+    });
 
-    // Inject sidebar fix CSS if enabled
-    if (game.settings.get('ui-qol-options', 'fixedSidebarButtons')) {
-        const styleId = 'ui-qol-sidebar-fix-style';
-        if (!document.getElementById(styleId)) {
-            const link = document.createElement('link');
-            link.id = styleId;
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = 'modules/ui-qol-options/styles/sidebar-fix.css';
-            document.head.appendChild(link);
-        }
-    }
+    _setOptionalStyle({
+        enabled: game.settings.get('ui-qol-options', 'fixedSidebarButtons'),
+        styleId: 'ui-qol-sidebar-fix-style',
+        href: 'modules/ui-qol-options/styles/sidebar-fix.css'
+    });
 
     document.addEventListener('pointerdown', (event) => {
         // Ignore synthetic events.
@@ -551,11 +585,11 @@ Hooks.on('ready', () => {
                     document.body.appendChild(node); // escapes overflow:hidden ancestors
                     Object.assign(node.style, {
                         position: 'fixed',
-                        top:      rect.top + 'px',
-                        bottom:   'auto',
-                        left:     'auto',
-                        right:    (window.innerWidth - rect.left) + 'px',
-                        width:    'max-content',
+                        top: rect.top + 'px',
+                        bottom: 'auto',
+                        left: 'auto',
+                        right: (window.innerWidth - rect.left) + 'px',
+                        width: 'max-content',
                         minWidth: 'unset',
                         maxWidth: '360px',
                     });
@@ -605,3 +639,40 @@ Hooks.on('renderChatInput', (_app, _elements, { previousParent }) => {
         }, 260);  // slightly longer than the 250 ms sidebar transition
     }
 });
+
+// Track the last right-clicked chat message so we can anchor the menu
+// even when V14 appends #context-menu to document.body (not to .chat-message).
+let _chatCtxMsgTarget = null;
+document.addEventListener('contextmenu', (e) => {
+    _chatCtxMsgTarget = e.target.closest('.chat-message') ?? null;
+}, { capture: true });
+
+const observer = new MutationObserver((mutations) => {
+    if (!game.settings.get('ui-qol-options', 'chatContextMenuLeft')) return;
+    for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+            if (node.nodeType !== 1 || node.id !== 'context-menu') continue;
+
+            // V13: menu appended to .chat-message → mutation.target IS the message.
+            // V14: menu appended to document.body → fall back to the tracked click target.
+            const chatMsg = mutation.target.classList.contains('chat-message')
+                ? mutation.target
+                : _chatCtxMsgTarget;
+            if (!chatMsg) continue;
+
+            const rect = chatMsg.getBoundingClientRect();
+            if (node.parentElement !== document.body) document.body.appendChild(node);
+            Object.assign(node.style, {
+                position: 'fixed',
+                top: rect.top + 'px',
+                bottom: 'auto',
+                left: 'auto',
+                right: (window.innerWidth - rect.left) + 'px',
+                width: 'max-content',
+                minWidth: 'unset',
+                maxWidth: '360px',
+            });
+        }
+    }
+});
+observer.observe(document.documentElement, { childList: true, subtree: true });
