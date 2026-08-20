@@ -1,3 +1,7 @@
+## 2.2 - 20 Aug 2026
+Fixed the sidebar being stuck to right edge regardless of settings checkbox state.
+Added toggleable functionality to fixed sidebar's buttons. Clicking the active button closes sidebar.
+
 ## 2.1 - 31 Jul 2026
 Removal of redundant templates folder and its files
 

@@ -11,8 +11,8 @@ For help and suggestions: [![Discord Server](https://img.shields.io/badge/-Disco
   - Tool-tip linger time (0-500 ms)
   - Chat Card context menu (right click) opening to left side instead of above or below the card.
   - Clearer Compendium Tabs.
-  - Fix sidebar menu buttons to right edge. 
-  - Gradient color background settings for the fixed sidebar and left side button area
+  - Fix sidebar menu buttons to right edge with expand/collapse functionality.
+  - Gradient color background settings for the fixed sidebar and left side button area.
 
 <img width="400" alt="uiqol1" src="https://github.com/user-attachments/assets/edcc572b-67a2-41fe-abfd-6e261578ca4a" />
 .
