@@ -648,7 +648,8 @@ document.addEventListener('contextmenu', (e) => {
 }, { capture: true });
 
 const observer = new MutationObserver((mutations) => {
-    if (!game.settings.get('ui-qol-options', 'chatContextMenuLeft')) return;
+    // Mutations can fire before `game.settings` is ready during initial page load.
+    if (typeof game === 'undefined' || typeof game.settings === 'undefined' || !game.settings.get('ui-qol-options', 'chatContextMenuLeft')) return;
     for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
             if (node.nodeType !== 1 || node.id !== 'context-menu') continue;
