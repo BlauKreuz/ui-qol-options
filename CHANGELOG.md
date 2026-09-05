@@ -1,3 +1,6 @@
+## 2.3 - 05 Sep 2026
+Minimal fix to prevent loading errors
+
 ## 2.2 - 20 Aug 2026
 Fixed the sidebar being stuck to right edge regardless of settings checkbox state.
 Added toggleable functionality to fixed sidebar's buttons. Clicking the active button closes sidebar.
